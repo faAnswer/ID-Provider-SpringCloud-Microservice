@@ -6,4 +6,6 @@ import org.tecky.common.entities.UserEntity;
 public interface UserEntityRepository extends JpaRepository<UserEntity, String> {
 
     public UserEntity findByEmail(String email);
+    public UserEntity findByUsername(String username);
+
 }

@@ -22,10 +22,12 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "shapassword")
+    private String shapassword;
+
+    @Column(name = "salt")
+    private String salt;
 
     @Column(name = "email")
     private String email;
-
 }

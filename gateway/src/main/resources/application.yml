@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: uaa-service
+          uri: lb://uaa-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - RewritePath=/user(?<segment>/?.*), $\{segment}
+    compatibility-verifier:
+      enabled: false
+  profiles:
+    active: devo
+  r2dbc:
+    url: r2dbc:pool:mysql://127.0.0.1:3307/nohorny?serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: a123456789
+    pool:
+      initial-size: 10
+      max-size: 50
+      max-idle-time: 30m
+      validation-query: SELECT 1
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
