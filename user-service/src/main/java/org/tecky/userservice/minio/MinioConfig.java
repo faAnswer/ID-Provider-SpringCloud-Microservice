@@ -1,4 +1,4 @@
-package org.tecky.userservice.config;
+package org.tecky.userservice.minio;
 
 import io.minio.MinioClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

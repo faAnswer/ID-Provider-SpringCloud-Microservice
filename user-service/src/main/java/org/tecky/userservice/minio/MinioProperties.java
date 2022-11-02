@@ -1,4 +1,4 @@
-package org.tecky.userservice.config;
+package org.tecky.userservice.minio;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

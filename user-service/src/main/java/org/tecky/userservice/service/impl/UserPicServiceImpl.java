@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.tecky.common.entities.UserInfoEntity;
 import org.tecky.common.mapper.UserInfoEntityRepository;
-import org.tecky.userservice.config.MinioProperties;
+import org.tecky.userservice.minio.MinioProperties;
 import org.tecky.userservice.service.intf.IUserPicService;
 
 import javax.annotation.Resource;

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
-    // 从 nacos 中读取配置项 config.info
-    @Value("${config.info}")
+    // 从 nacos 中读取配置项 minio.info
+    @Value("${minio.info}")
     private String configInfo;
 
     @GetMapping("/getconfig")
