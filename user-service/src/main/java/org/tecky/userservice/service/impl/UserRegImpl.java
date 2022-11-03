@@ -23,7 +23,6 @@ public class UserRegImpl implements IUserRegService {
         String shapassword = SHA256.digest2String(password + salt);
 
         userEntity.setShapassword(shapassword);
-        userEntity.setRoles("member");
         userEntity.setSalt(salt);
 
         return userEntityRepository.save(userEntity);
