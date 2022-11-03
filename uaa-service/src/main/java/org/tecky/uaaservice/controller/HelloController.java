@@ -1,4 +1,4 @@
-package org.tecky.uaaservice;
+package org.tecky.uaaservice.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

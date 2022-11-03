@@ -16,9 +16,6 @@ public class UserEntity {
     @Id
     private int uid;
 
-    @Column(name = "roles")
-    private String roles;
-
     @Column(name = "username")
     private String username;
 
