@@ -20,6 +20,9 @@ import org.tecky.uaaservice.mapper.UserRoleEntityRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Administrator
+ */
 @Service
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
