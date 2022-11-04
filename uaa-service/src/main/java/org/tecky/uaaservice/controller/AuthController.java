@@ -1,5 +1,6 @@
 package org.tecky.uaaservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -30,6 +32,7 @@ public class AuthController {
     @PostMapping(value = "/auth")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String, String> userInfo) throws Exception {
 
+        log.info("Auth");
         authenticate(userInfo.get("username"), userInfo.get("password"));
 
         final UserDetails userDetails = userDetailsService

@@ -1,5 +1,6 @@
 package org.tecky.uaaservice.security.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
 public class WebSecurityConfig {
 
     @Autowired
@@ -50,21 +52,21 @@ public class WebSecurityConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
+        log.info("FilterChain");
+
+        return http.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/auth").permitAll().
+                .authorizeRequests().antMatchers("/*").permitAll().and().build();
                 // all other requests need to be authenticated
-                        anyRequest().authenticated().and().
+               //         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to
                 // store user's state.
-                        sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 
         // Add a filter to validate the tokens with every request
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        //http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 
-        return http.build();
     }
 
 

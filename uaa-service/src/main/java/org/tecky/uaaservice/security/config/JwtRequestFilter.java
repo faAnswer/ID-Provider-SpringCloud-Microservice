@@ -1,6 +1,7 @@
 package org.tecky.uaaservice.security.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import org.apache.catalina.core.ApplicationFilterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
