@@ -8,10 +8,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import org.tecky.common.util.JwtTokenUtil;
 import org.tecky.uaaservice.security.services.JwtResponseImpl;
+import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
+import org.tecky.uaaservice.util.JwtTokenUtil;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class AuthController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @PostMapping(value = "/auth")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String, String> userInfo) throws Exception {
@@ -35,12 +35,16 @@ public class AuthController {
         log.info("Auth");
         authenticate(userInfo.get("username"), userInfo.get("password"));
 
-        final UserDetails userDetails = userDetailsService
+        final UserDetails userDetails = userDetailsServiceImpl
                 .loadUserByUsername(userInfo.get("username"));
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtResponseImpl(token));
+        JwtResponseImpl token = new JwtResponseImpl(jwtTokenUtil.generateToken(userDetails));
+
+
+        final String tokenS = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok().header("Authorization", token.getToken()).body(token.getToken());
     }
 
     private void authenticate(String username, String password) throws Exception {

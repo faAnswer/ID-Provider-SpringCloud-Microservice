@@ -3,8 +3,9 @@ package org.tecky.uaaservice.security.services;
 import java.io.Serializable;
 
 public class JwtResponseImpl implements Serializable {
+    private static final long serialVersionUID = -809187904046844L;
 
-    private static final long serialVersionUID = -8091879091924046844L;
+    //private static final long serialVersionUID = -8091879091924046844L;
     private final String jwttoken;
 
     public JwtResponseImpl(String jwttoken) {
@@ -12,6 +13,6 @@ public class JwtResponseImpl implements Serializable {
     }
 
     public String getToken() {
-        return this.jwttoken;
+        return "Bearer "+ this.jwttoken;
     }
 }

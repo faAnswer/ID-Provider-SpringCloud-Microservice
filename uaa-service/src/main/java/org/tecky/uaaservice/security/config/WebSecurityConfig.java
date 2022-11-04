@@ -1,24 +1,31 @@
 package org.tecky.uaaservice.security.config;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -27,25 +34,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     @Autowired
-    UserDetailsService userDetailsService;
+    UserDetailsServiceImpl userDetailsServiceImpl;
+
     @Autowired
     JwtRequestFilter jwtRequestFilter;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(){
+
+        var authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(userDetailsServiceImpl);
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return new ProviderManager(authProvider);
     }
 
     @Bean
@@ -54,18 +61,14 @@ public class WebSecurityConfig {
 
         log.info("FilterChain");
 
-        return http.csrf().disable()
-                // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/*").permitAll().and().build();
-                // all other requests need to be authenticated
-               //         anyRequest().authenticated().and().
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
+         http.csrf().disable()
+                 .authorizeRequests()
+                 .antMatchers("/auth").permitAll()
+                 .anyRequest().authenticated();
 
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Add a filter to validate the tokens with every request
-        //http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
+        return http.build();
 
     }
 

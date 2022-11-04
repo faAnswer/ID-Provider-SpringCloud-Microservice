@@ -1,7 +1,7 @@
 package org.tecky.uaaservice.mapper;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.tecky.common.entities.UserRoleEntity;
+import org.tecky.uaaservice.entities.UserRoleEntity;
 
 import java.util.List;
 

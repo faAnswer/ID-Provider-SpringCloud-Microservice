@@ -10,7 +10,6 @@
         <option value="$PROJECT_DIR$/nacos-config/pom.xml" />
         <option value="$PROJECT_DIR$/uaa-service/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
-        <option value="$PROJECT_DIR$/auth-service/pom.xml" />
       </list>
     </option>
   </component>
