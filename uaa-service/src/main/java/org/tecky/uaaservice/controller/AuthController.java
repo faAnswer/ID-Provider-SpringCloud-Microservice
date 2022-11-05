@@ -18,6 +18,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 @Slf4j
+@RequestMapping(value = "/auth")
 public class AuthController {
 
     @Autowired
@@ -29,7 +30,23 @@ public class AuthController {
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
-    @PostMapping(value = "/auth")
+    @PostMapping(value = "/login")
+    public String login(@RequestBody Map<String, String> userInfo) throws Exception{
+
+        authenticate(userInfo.get("username"), userInfo.get("password"));
+
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userInfo.get("username"));
+
+
+
+
+
+        return "hi";
+    }
+
+
+
+    @PostMapping(value = "/token")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String, String> userInfo) throws Exception {
 
         log.info("Auth");
