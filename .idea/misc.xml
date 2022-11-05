@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/uaa-service/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
         <option value="$PROJECT_DIR$/../JwtToken/pom.xml" />
+        <option value="$PROJECT_DIR$/../lib/pom.xml" />
       </list>
     </option>
   </component>

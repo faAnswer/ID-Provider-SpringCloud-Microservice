@@ -1,8 +1,13 @@
 package org.tecky.uaaservice.security.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
+import org.faAnswer.jwt.JwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.filter.OrderedFormContentFilter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
 import org.tecky.uaaservice.util.JwtTokenUtil;
 
+import javax.persistence.PostLoad;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -87,8 +93,8 @@ import java.io.IOException;
 @Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    @Value("${jwt.secret}")
+    private String secret;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -99,6 +105,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
+        JwtToken jwtTokenUtil = new JwtToken(this.secret);
 
         String username = null;
         String jwtToken = null;
@@ -110,7 +117,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwtToken = requestTokenHeader.substring(7);
             try {
 
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                username = (String) jwtTokenUtil.getPayload(jwtToken, "username");
+            } catch (MalformedJwtException | SignatureException e) {
+
+                log.info("Invaild JWT Token");
             } catch (IllegalArgumentException e) {
 
                 log.info("Unable to get JWT Token");
@@ -130,7 +140,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            if (jwtTokenUtil.valid(jwtToken)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
@@ -144,6 +154,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+
         chain.doFilter(request, response);
     }
 }
