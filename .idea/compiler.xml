@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="JwtToken" />
         <module name="cloud-nohorny" />
-        <module name="user-service" />
         <module name="nacos-config" />
+        <module name="user-service" />
         <module name="uaa-service" />
         <module name="gateway" />
       </profile>
@@ -20,6 +20,7 @@
       <module name="common" target="1.8" />
       <module name="service-nacos" target="1.8" />
       <module name="springcloud-nacos-consumer" target="1.8" />
+      <module name="view-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

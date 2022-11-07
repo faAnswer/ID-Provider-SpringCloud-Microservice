@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: uua-service-Auth-CORS
+          uri: lb://uaa-service
+          predicates:
+            - Path=/api/uaa/oauth/authorize
+          filters:
+            - SetPath=/oauth/authorize
+#            - RewritePath=/api/uaa/(?<segment>.*),/$\{segment}
