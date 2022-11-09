@@ -82,7 +82,7 @@ public class WebSecurityConfig {
                     .disable()
                  .formLogin()
                     .loginPage("/login.html")
-                    .loginProcessingUrl("/oauth/authorize")
+                    .loginProcessingUrl("/oauth/login")
                     .successHandler(authSuccessRedirectHandler)
                     .and()
                  .authorizeRequests()

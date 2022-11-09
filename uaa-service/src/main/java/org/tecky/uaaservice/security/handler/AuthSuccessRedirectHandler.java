@@ -5,19 +5,27 @@ import org.apache.catalina.authenticator.SavedRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.tecky.uaaservice.security.config.impl.RedirectRequestCache;
+import org.tecky.uaaservice.security.services.JwtResponseImpl;
+import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
+import org.tecky.uaaservice.util.JwtTokenUtil;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,19 +36,38 @@ public class AuthSuccessRedirectHandler implements AuthenticationSuccessHandler 
     @Autowired
     RedirectRequestCache redirectRequestCache;
 
+    @Autowired
+    UserDetailsServiceImpl userDetailsServiceImpl;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    HttpSession httpSession;
+
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                  Authentication authentication) throws IOException, ServletException{
 
+        // Get target URL
         List<DefaultSavedRequest> savedRequestList = (List<DefaultSavedRequest>) request.getSession().getAttribute(RedirectRequestCache.SAVED_REQUEST);
-
         String tarRequest = savedRequestList.get(0).getRedirectUrl();
+        redirectRequestCache.removeSavedRequest();
 
-        //savedRequestList.get(0)
+        // Add Auth JWT to Response
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authentication.getName());
+        JwtResponseImpl token = new JwtResponseImpl(jwtTokenUtil.generateToken(userDetails));
+        response.addHeader("Authentication", token.getToken());
+
+        Cookie cookie = new Cookie("Authentication", token.getToken());
+        cookie.setMaxAge(7*24*60*60);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        // Redirect
         redirectStrategy.sendRedirect(request, response, tarRequest);
 
-        redirectRequestCache.removeSavedRequest();
     }
 }

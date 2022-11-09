@@ -104,14 +104,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-
-            chain.doFilter(request, response);
-            return;
-        }
-
-
-            final String requestTokenHeader = request.getHeader("Authorization");
+        final String requestTokenHeader = request.getHeader("Authorization");
         JwtToken jwtTokenUtil = new JwtToken(this.secret);
 
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
@@ -126,7 +119,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-
 
         String jwtToken = requestTokenHeader.substring(7);
         String username = null;
@@ -166,25 +158,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
 
         }
+
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+
+            chain.doFilter(request, response);
+            return;
+        }
+
         // Once we get the token validate it.
-
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
 
         // if token is valid configure Spring Security to manually set
         // authentication
-
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
 
         // After setting the Authentication in the context, we specify
         // that the current user is authenticated. So it passes the
         // Spring Security Configurations successfully.
 
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
 
         chain.doFilter(request, response);
     }
