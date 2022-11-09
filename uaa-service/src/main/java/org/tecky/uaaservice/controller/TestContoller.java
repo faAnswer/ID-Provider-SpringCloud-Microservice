@@ -27,5 +27,11 @@ public class TestContoller {
         return "test";
     }
 
+    @GetMapping("/test2")
+    public String gotest2(Authentication authentication) {
 
+        //UserDetails user = userDetailsService.loadUserByUsername(regInfo.get("username"));
+
+        return "test2";
+    }
 }

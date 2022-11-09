@@ -14,6 +14,8 @@ import org.tecky.uaaservice.security.services.JwtResponseImpl;
 import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
 import org.tecky.uaaservice.util.JwtTokenUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
@@ -31,8 +33,9 @@ public class OauthController {
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @PostMapping(value = "/authorize", consumes = "application/x-www-form-urlencoded")
-    public String auth(@RequestParam Map<String, String> userInfo) throws Exception{
+    public String auth(@RequestParam Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception{
 
+        log.info("userInfo");
 
         return "hi";
     }

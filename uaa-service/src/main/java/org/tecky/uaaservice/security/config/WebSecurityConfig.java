@@ -18,19 +18,20 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.tecky.uaaservice.security.handler.AuthSuccessHandler;
+import org.tecky.uaaservice.security.config.impl.RedirectRequestCache;
+import org.tecky.uaaservice.security.handler.AuthSuccessRedirectHandler;
 import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
 
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class WebSecurityConfig {
     JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    AuthSuccessHandler authSuccessHandler;
+    AuthSuccessRedirectHandler authSuccessRedirectHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -68,6 +69,7 @@ public class WebSecurityConfig {
         return new ProviderManager(authProvider);
     }
 
+
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -81,13 +83,22 @@ public class WebSecurityConfig {
                  .formLogin()
                     .loginPage("/login.html")
                     .loginProcessingUrl("/oauth/authorize")
-                    .successHandler(authSuccessHandler)
+                    .successHandler(authSuccessRedirectHandler)
                     .and()
                  .authorizeRequests()
+
                     .antMatchers("/login").permitAll()
                     .antMatchers("/login.html").permitAll()
                     .antMatchers("/oauth/login").permitAll()
-                    .anyRequest().authenticated();
+                    .antMatchers("/oauth/authorize").permitAll()
+                    .antMatchers("/*.js").permitAll()
+                    .antMatchers("/**/*.js").permitAll()
+                    .antMatchers("/*.css").permitAll()
+                    .antMatchers("/**/*.css").permitAll()
+                    .antMatchers("/*.ico").permitAll()
+                    .antMatchers("/**/*.ico").permitAll()
+                    .anyRequest().authenticated()
+                    .and();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -108,4 +119,7 @@ public class WebSecurityConfig {
 
         return source;
     }
+
+
+
 }
