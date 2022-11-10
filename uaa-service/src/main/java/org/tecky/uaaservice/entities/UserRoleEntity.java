@@ -19,6 +19,4 @@ public class UserRoleEntity {
 
     @Column(name = "role_id", nullable = false)
     private int roleid;
-
-
 }

@@ -51,11 +51,6 @@ public class AuthSuccessRedirectHandler implements AuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                  Authentication authentication) throws IOException, ServletException{
 
-        // Get target URL
-        List<DefaultSavedRequest> savedRequestList = (List<DefaultSavedRequest>) request.getSession().getAttribute(RedirectRequestCache.SAVED_REQUEST);
-        String tarRequest = savedRequestList.get(0).getRedirectUrl();
-        redirectRequestCache.removeSavedRequest();
-
         // Add Auth JWT to Response
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authentication.getName());
         JwtResponseImpl token = new JwtResponseImpl(jwtTokenUtil.generateToken(userDetails));
@@ -65,6 +60,19 @@ public class AuthSuccessRedirectHandler implements AuthenticationSuccessHandler 
         cookie.setMaxAge(7*24*60*60);
         cookie.setPath("/");
         response.addCookie(cookie);
+
+        // Get target URL
+        List<DefaultSavedRequest> savedRequestList = (List<DefaultSavedRequest>) request.getSession().getAttribute(RedirectRequestCache.SAVED_REQUEST);
+
+        if(savedRequestList.get(0).getRequestURI().equals("/login")){
+
+            redirectRequestCache.removeSavedRequest();
+            redirectStrategy.sendRedirect(request, response, "/index");
+            return;
+        }
+
+        String tarRequest = savedRequestList.get(0).getRedirectUrl();
+        redirectRequestCache.removeSavedRequest();
 
         // Redirect
         redirectStrategy.sendRedirect(request, response, tarRequest);

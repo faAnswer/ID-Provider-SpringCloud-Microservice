@@ -17,4 +17,7 @@ public class WebSecurityConfig {
                 .anyExchange().authenticated()
                 .and().csrf().disable().build();
     }
+
+
+
 }
