@@ -29,7 +29,6 @@ public class UserController {
     @Autowired
     RedirectRequestCache redirectRequestCache;
 
-
     @GetMapping("/hello")
     public String hello(){
 
@@ -37,9 +36,7 @@ public class UserController {
         return "hello";
     }
 
-
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
 
     @PostMapping(value = "/api/user/login", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public ResponseEntity<?> login(@RequestParam Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response) throws IOException {
