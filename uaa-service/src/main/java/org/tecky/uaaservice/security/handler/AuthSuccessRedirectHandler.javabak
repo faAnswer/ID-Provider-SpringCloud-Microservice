@@ -18,7 +18,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.tecky.uaaservice.security.config.impl.RedirectRequestCache;
 import org.tecky.uaaservice.security.services.JwtResponseImpl;
-import org.tecky.uaaservice.security.services.UserDetailsServiceImpl;
+import org.tecky.uaaservice.services.impl.UserDetailsServiceImpl;
 import org.tecky.uaaservice.util.JwtTokenUtil;
 
 import javax.servlet.ServletException;

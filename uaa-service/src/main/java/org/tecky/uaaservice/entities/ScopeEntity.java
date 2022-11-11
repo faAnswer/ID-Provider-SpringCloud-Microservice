@@ -10,13 +10,16 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@Table(name = "t_user_role")
-public class UserRoleEntity {
+@Table(name = "t_scope")
+public class ScopeEntity {
 
     @Id
-    private int uid;
+    private int scopeid;
 
-    @Column(name = "roleid")
-    private int roleid;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "uri")
+    private String uri;
 
 }

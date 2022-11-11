@@ -1,4 +1,4 @@
-package org.tecky.uaaservice.security.services;
+package org.tecky.uaaservice.services.impl;
 
 import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import lombok.extern.slf4j.Slf4j;

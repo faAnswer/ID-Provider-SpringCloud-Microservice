@@ -2,7 +2,6 @@ package org.tecky.uaaservice.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,15 +16,16 @@ public class UserEntity {
     @Id
     private int uid;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "salt")
+    private String salt;
 
     @Column(name = "shapassword")
     private String shapassword;
 
-    @Column(name = "salt")
-    private String salt;
-
     @Column(name = "email")
     private String email;
+
+    @Column(name = "username")
+    private String username;
+
 }

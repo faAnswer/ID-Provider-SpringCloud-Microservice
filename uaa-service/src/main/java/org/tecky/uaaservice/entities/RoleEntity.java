@@ -2,7 +2,6 @@ package org.tecky.uaaservice.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,9 +14,9 @@ import javax.persistence.Table;
 public class RoleEntity {
 
     @Id
-    @Column(name = "role_id", nullable = false)
     private int roleid;
 
     @Column(name = "name")
     private String name;
+
 }

@@ -1,4 +1,4 @@
-package org.tecky.viewserver.security.filter;
+package org.tecky.uaaservice.security.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -12,33 +12,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
-
-
-//        Optional<Cookie> tarCookie = Arrays.stream(request.getCookies())
-//        .filter(cookie -> cookie.getName().equals("Authorization"))
-//        .findFirst();
-//
-//
-//        // JWT Token is in the form "Bearer token". Remove Bearer word and get
-//        // only the Token
-//        if (!tarCookie.isPresent()) {
-//        log.info("JWT Token Not Found");
-//        chain.doFilter(request, response);
-//        return;
-//        }
-//
-//
-//        String jwtToken = tarCookie.get().getValue();
-//        JwtToken jwtTokenUtil = new JwtToken(this.secret);
-//
-//        String username;
 
 @Component
 @Slf4j
@@ -68,8 +49,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-
-
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestToken[0]== null) {

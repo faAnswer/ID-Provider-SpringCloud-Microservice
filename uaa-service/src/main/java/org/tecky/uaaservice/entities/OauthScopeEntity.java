@@ -10,13 +10,13 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@Table(name = "t_user_role")
-public class UserRoleEntity {
+@Table(name = "t_oauth_scope")
+public class OauthScopeEntity {
 
     @Id
-    private int uid;
+    private int appid;
 
-    @Column(name = "roleid")
-    private int roleid;
+    @Column(name = "scopeid")
+    private int scopeid;
 
 }

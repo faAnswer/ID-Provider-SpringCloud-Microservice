@@ -10,13 +10,13 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@Table(name = "t_user_role")
-public class UserRoleEntity {
+@Table(name = "t_user_authorize")
+public class UserAuthorizeEntity {
 
     @Id
     private int uid;
 
-    @Column(name = "roleid")
-    private int roleid;
+    @Column(name = "appid")
+    private int appid;
 
 }
