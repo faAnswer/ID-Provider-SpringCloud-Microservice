@@ -40,8 +40,6 @@ public class OauthController {
 
 
 
-
-
         log.info("userInfo");
 
         return "hi";

@@ -110,9 +110,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         for (String key : keys) {
 
             authorities.add(new SimpleGrantedAuthority(linkedHashMap.get(key)));
-            log.info(linkedHashMap.get(key));
         }
-
 
 //        // if token is valid configure Spring Security to manually set
 //        // authentication

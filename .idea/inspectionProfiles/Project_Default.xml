@@ -5,6 +5,7 @@
       <option name="customHeaders">
         <set>
           <option value="Authentication" />
+          <option value="redirect_uri" />
         </set>
       </option>
     </inspection_tool>

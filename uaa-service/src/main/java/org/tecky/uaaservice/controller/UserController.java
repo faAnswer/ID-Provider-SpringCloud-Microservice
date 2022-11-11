@@ -31,9 +31,6 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Value("${jwt.secret}")
@@ -42,8 +39,6 @@ public class UserController {
 
     @GetMapping(value = "/hello")
     public String hello() throws Exception{
-
-
 
         return "hello";
     }
@@ -69,7 +64,7 @@ public class UserController {
 
         Cookie cookie = new Cookie("Authorization", token.getToken());
 
-        cookie.setMaxAge(7*24*60*60);
+        cookie.setMaxAge(7*24*60*60*60);
         cookie.setPath("/");
         response.addCookie(cookie);
 
