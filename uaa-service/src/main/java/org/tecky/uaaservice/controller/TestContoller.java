@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.tecky.uaaservice.entities.OauthClientEntity;
+import org.tecky.uaaservice.mapper.OauthClientEntityRepository;
+import org.tecky.uaaservice.services.FetchClientScrect;
 
 import java.util.Map;
 
@@ -18,20 +21,35 @@ public class TestContoller {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Autowired
+    FetchClientScrect fetchClientScrect;
+
+
+    @Autowired
+    OauthClientEntityRepository oauthClientEntityRepository;
+
 
     @GetMapping("/test")
-    public String gotest(Authentication authentication) {
+    public String gotest() {
 
-        //UserDetails user = userDetailsService.loadUserByUsername(regInfo.get("username"));
+        OauthClientEntity oauthClientEntity = new OauthClientEntity();
+
+        oauthClientEntity.setName("TEST");
+        oauthClientEntity.setClientid("TESTTTTT");
+        oauthClientEntity.setStatus("alive");
+        oauthClientEntity.setClientsecret("HGHJKGVBKJVBJK");
+        oauthClientEntity.setRedirecturi("GHJFVHJVJKHVJKH");
+
+        oauthClientEntityRepository.saveAndFlush(oauthClientEntity);
 
         return "test";
     }
 
-    @GetMapping("/test2")
-    public String gotest2(Authentication authentication) {
+    @GetMapping("/fetch")
+    public String gotest2() throws Exception {
 
-        //UserDetails user = userDetailsService.loadUserByUsername(regInfo.get("username"));
+        fetchClientScrect.fetch();
 
-        return "test2";
+        return "fetch success";
     }
 }

@@ -16,4 +16,7 @@ public class SecurityConfig {
                 .antMatchers("/**").hasRole("USER").and().formLogin().and().build();
 
     }
+
+
+
 }

@@ -97,7 +97,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (username == null || authorizeList == null) {
+        if (username == null || authorizeList.isEmpty()) {
 
             log.info("Missing Data in JWT Token");
             chain.doFilter(request, response);

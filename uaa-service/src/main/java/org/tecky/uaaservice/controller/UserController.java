@@ -13,8 +13,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.tecky.uaaservice.entities.UserEntity;
 import org.tecky.uaaservice.security.services.JwtResponseImpl;
 import org.tecky.uaaservice.services.impl.UserDetailsServiceImpl;
+import org.tecky.uaaservice.services.intf.IRegService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,9 @@ public class UserController {
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
+    @Autowired
+    private IRegService iRegService;
+
     @Value("${jwt.secret}")
     private String secret;
 
@@ -47,29 +52,14 @@ public class UserController {
 
         log.info("register");
 
-        authenticate(userInfo.get("username"), userInfo.get("password"));
+        UserEntity userEntity = new UserEntity();
 
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userInfo.get("username"));
+        userEntity.setUsername(userInfo.get("username"));
+        userEntity.setShapassword(userInfo.get("password"));
+        userEntity.setEmail(userInfo.get("email"));
 
-        JwtToken jwtToken = new JwtToken(this.secret);
-
-        jwtToken.setPayload("username", userDetails.getUsername());
-        jwtToken.setPayload("authorize", userDetails.getAuthorities());
-
-
-        JwtResponseImpl token = new JwtResponseImpl(jwtToken.generateToken());
-
-        Cookie cookie = new Cookie("Authorization", token.getToken());
-
-        cookie.setMaxAge(7*24*60*60*60);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        return JSONResponse.ok("username", userInfo.get("username"));
+        return iRegService.regNewUser(userEntity);
     }
-
-
-
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@RequestBody Map<String, String> userInfo, Authentication authentication, HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -85,7 +75,6 @@ public class UserController {
 
         jwtToken.setPayload("username", userDetails.getUsername());
         jwtToken.setPayload("authorize", userDetails.getAuthorities());
-
 
         JwtResponseImpl token = new JwtResponseImpl(jwtToken.generateToken());
 

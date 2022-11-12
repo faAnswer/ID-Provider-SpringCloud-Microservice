@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -48,7 +49,7 @@ public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -75,7 +76,7 @@ public class WebSecurityConfig {
                     .disable()
 
                  .authorizeRequests()
-
+                    .antMatchers("/fetch").permitAll()
                     .antMatchers("/index.html").permitAll()
                     .antMatchers("/index").permitAll()
                     .antMatchers("/login.html").permitAll()
@@ -90,7 +91,7 @@ public class WebSecurityConfig {
                     .antMatchers("/**/*.ico").permitAll()
                     .antMatchers("/*.jpg").permitAll()
                     .antMatchers("/**/*.jpg").permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
                     .and();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

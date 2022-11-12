@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
-    // 从 nacos 中读取配置项 minio.info
-    @Value("${minio.info}")
-    private String configInfo;
+//    // 从 nacos 中读取配置项 minio.info
+//    @Value("${minio.info}")
+//    private String configInfo;
 
-    @GetMapping("/getconfig")
+    @GetMapping("/test")
     public String getConfigInfo(){
-        return configInfo;
+        return "hello";
     }
 }
