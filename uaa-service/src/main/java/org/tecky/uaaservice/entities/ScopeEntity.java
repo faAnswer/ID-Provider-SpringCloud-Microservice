@@ -18,8 +18,4 @@ public class ScopeEntity {
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "uri")
-    private String uri;
-
 }

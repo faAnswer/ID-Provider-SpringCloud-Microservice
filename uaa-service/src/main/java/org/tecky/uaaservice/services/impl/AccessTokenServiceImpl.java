@@ -3,12 +3,12 @@ package org.tecky.uaaservice.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.tecky.uaaservice.entities.OauthClientEntity;
 import org.tecky.uaaservice.entities.OauthScopeEntity;
 import org.tecky.uaaservice.mapper.OauthClientEntityRepository;
 import org.tecky.uaaservice.mapper.OauthScopeEntityRepository;
+import org.tecky.uaaservice.mapper.ScopeEntityRepository;
 import org.tecky.uaaservice.services.intf.IAccessTokenService;
 import org.faAnswer.jwt.JwtToken;
 
@@ -28,19 +28,24 @@ public class AccessTokenServiceImpl implements IAccessTokenService {
     @Autowired
     OauthScopeEntityRepository oauthScopeEntityRepository;
 
+    @Autowired
+    ScopeEntityRepository scopeEntityRepository;
+
+
     @Override
     public String getAccessToken(Authentication authentication, Map<String, String> oAuthInfo) {
 
         String clientID = oAuthInfo.get("client_id");
 
         OauthClientEntity oauthClientEntity = oauthClientEntityRepository.findByClientid(clientID);
-        List<OauthScopeEntity> oauthScopeEntity = oauthScopeEntityRepository.findAllByAppid(oauthClientEntity.getAppid());
+        List<OauthScopeEntity> oauthScopeEntity = oauthScopeEntityRepository.findByAppid(oauthClientEntity.getAppid());
 
-        List<Integer> scopeList = new ArrayList<Integer>();
+        List<String> scopeList = new ArrayList<>();
 
         for(OauthScopeEntity i : oauthScopeEntity){
 
-            scopeList.add(i.getScopeid());
+
+            scopeList.add(scopeEntityRepository.findByScopeid(i.getScopeid()).getName());
         }
 
         JwtToken jwtToken = new JwtToken(oauthClientEntity.getClientsecret());

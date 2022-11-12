@@ -2,21 +2,19 @@ package org.tecky.uaaservice.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "t_oauth_scope")
+@IdClass(org.tecky.uaaservice.entities.comprimarykey.OauthScopePK.class)
 public class OauthScopeEntity {
 
     @Id
     private int appid;
 
-    @Column(name = "scopeid")
+    @Id
     private int scopeid;
-
 }

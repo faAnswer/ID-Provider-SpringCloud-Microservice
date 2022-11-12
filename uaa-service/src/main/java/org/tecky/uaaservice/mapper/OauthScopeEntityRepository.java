@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface OauthScopeEntityRepository extends JpaRepository<OauthScopeEntity, String> {
 
-    public List<OauthScopeEntity> findAllByAppid(Integer appid);
+    public List<OauthScopeEntity> findByAppid(Integer appid);
 
 }
