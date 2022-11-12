@@ -16,15 +16,15 @@ public class ResourceController {
     private final Integer USER_DETAIL_SCOPEID = 1;
 
 
-    @GetMapping("/profile")
-    public ResponseEntity<?> getProfile(HttpServletRequest request, HttpServletResponse response){
-
-
-
-
-
-
-
-    }
+//    @GetMapping("/profile")
+//    public ResponseEntity<?> getProfile(HttpServletRequest request, HttpServletResponse response){
+//
+//
+//
+//
+//
+//
+//
+//    }
 
 }
