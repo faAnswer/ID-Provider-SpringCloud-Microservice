@@ -74,7 +74,6 @@ public class WebSecurityConfig {
                  .cors(withDefaults())
                  .csrf()
                     .disable()
-
                  .authorizeRequests()
                     .antMatchers("/fetch").permitAll()
                     .antMatchers("/index.html").permitAll()
@@ -91,7 +90,7 @@ public class WebSecurityConfig {
                     .antMatchers("/**/*.ico").permitAll()
                     .antMatchers("/*.jpg").permitAll()
                     .antMatchers("/**/*.jpg").permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
                     .and();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

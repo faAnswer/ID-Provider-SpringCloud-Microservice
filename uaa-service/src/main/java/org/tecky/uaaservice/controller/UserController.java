@@ -11,7 +11,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 import org.tecky.uaaservice.entities.UserEntity;
 import org.tecky.uaaservice.security.services.JwtResponseImpl;
@@ -48,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> userInfo, Authentication authentication, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ResponseEntity<?> register(@RequestBody Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         log.info("register");
 
@@ -58,18 +60,19 @@ public class UserController {
         userEntity.setShapassword(userInfo.get("password"));
         userEntity.setEmail(userInfo.get("email"));
 
-        return iRegService.regNewUser(userEntity);
+        iRegService.regNewUser(userEntity);
+
+        return login(userInfo, request, response);
     }
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> userInfo, Authentication authentication, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ResponseEntity<?> login(@RequestBody Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         log.info("authLogin");
 
-        authenticate(userInfo.get("username"), userInfo.get("password"));
+        authenticate(userInfo.get("username"), userInfo.get("password"), request);
 
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userInfo.get("username"));
-
 
         JwtToken jwtToken = new JwtToken(this.secret);
 
@@ -87,9 +90,11 @@ public class UserController {
         return JSONResponse.ok("username", userInfo.get("username"));
     }
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(String username, String password, HttpServletRequest request) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (DisabledException e) {
 

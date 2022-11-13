@@ -10,3 +10,7 @@ spring:
           uri: lb://uaa-service
           predicates:
             - Path=/api/auth/**
+        - id: user-resource
+          uri: lb://user-resource
+          predicates:
+            - Path=/api/res/user/**

@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 
                 .authorizeRequests()
 
-                .antMatchers("/api/res/user/profile").hasRole("USER_DETAIL")
+                .antMatchers("/api/res/user/profile").permitAll()
                 .antMatchers("/index").permitAll()
                 .antMatchers("/login.html").permitAll()
                 .antMatchers("/api/user/login").permitAll()
@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                 .antMatchers("/*.jpg").permitAll()
                 .antMatchers("/**/*.jpg").permitAll()
 
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and();
 
         http.addFilterBefore(accessTokenFilter, UsernamePasswordAuthenticationFilter.class);

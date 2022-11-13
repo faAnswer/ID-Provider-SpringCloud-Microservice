@@ -39,11 +39,18 @@ public class AccessTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        final String[] requestToken = new String[1];
+
+        if(request.getCookies() == null){
+
+            log.info("Cookie Not Found");
+            chain.doFilter(request, response);
+            return;
+        }
+
 
         Optional<Cookie> cookie = Arrays.stream(request.getCookies())
-                .filter(element -> element.getName().equals("AccessToken"))
-                .findFirst();
+                .filter(element -> element.getName().equals("AccessToken")).findFirst();
+
 
         if(!cookie.isPresent()){
 
