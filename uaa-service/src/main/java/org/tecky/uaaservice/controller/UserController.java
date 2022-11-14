@@ -28,6 +28,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/api/auth")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired

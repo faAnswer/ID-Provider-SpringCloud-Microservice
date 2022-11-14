@@ -22,7 +22,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/api/oauth")
-
+@CrossOrigin("*")
 public class OauthController {
 
     @Autowired

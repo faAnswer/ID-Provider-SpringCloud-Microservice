@@ -57,7 +57,7 @@ public class UserController {
         //String results = restTemplate.getForObject(uri2, String.class);
         ResponseEntity<?> result = restTemplate.postForEntity(uri, request2, String.class);
 
-        
+
         // Get target URL
         List<DefaultSavedRequest> savedRequestList = (List<DefaultSavedRequest>) request.getSession().getAttribute(RedirectRequestCache.SAVED_REQUEST);
 
