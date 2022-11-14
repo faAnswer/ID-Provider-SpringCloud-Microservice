@@ -14,7 +14,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain webFluxSecurityFilterChain(ServerHttpSecurity http) {
-        return http.cors(withDefaults()).authorizeExchange()
+        return http.authorizeExchange()
                 .pathMatchers("/**").permitAll()
                 .anyExchange().authenticated()
                 .and().csrf().disable().build();
