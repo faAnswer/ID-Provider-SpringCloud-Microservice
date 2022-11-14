@@ -1,5 +1,7 @@
 package org.tecky.viewserver.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,24 +18,18 @@ import java.util.Map;
 public class OauthController {
 
     @GetMapping("/authorize")
-    public ResponseEntity<?> auth(@RequestParam Map<String, String> requestParam HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> auth(@RequestParam Map<String, String> requestParam, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();
 
         ObjectMapper mapper = new ObjectMapper();
 
-        mapper.write(requestParam);
-
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        HttpEntity<String> request2UAA = new HttpEntity<>(mapper.writeValueAsString(requestParam), headers);
 
-
-        HttpEntity<String> request2 = new HttpEntity<>(jsonObject.toString(), headers);
-
-        restTemplate.getForEntity("http://47.92.137.0:9001/api/oauth/authorize",)
+        restTemplate.getForEntity("http://47.92.137.0:9001/api/oauth/authorize", String.class, request2UAA);
 
 
 
