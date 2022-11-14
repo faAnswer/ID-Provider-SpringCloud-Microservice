@@ -29,11 +29,10 @@ public class OauthController {
 
         HttpEntity<String> request2UAA = new HttpEntity<>(mapper.writeValueAsString(requestParam), headers);
 
-        restTemplate.getForEntity("http://47.92.137.0:9001/api/oauth/authorize", String.class, request2UAA);
+        ResponseEntity<?> responseEntity = restTemplate.getForEntity("http://47.92.137.0:9001/api/oauth/authorize", String.class, request2UAA);
 
 
-
-
+        return responseEntity;
     }
 
 }

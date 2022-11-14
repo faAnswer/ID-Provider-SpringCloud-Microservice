@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping(value = "/api/user/login", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public ResponseEntity<?> login(@RequestParam Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String uri = "http://localhost:9001/api/auth/login";
+        String uri = "http://47.92.137.0:9001/api/auth/login";
 
         RestTemplate restTemplate = new RestTemplate();
 
