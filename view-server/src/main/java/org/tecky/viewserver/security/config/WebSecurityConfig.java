@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                 .antMatchers("/**/*.ico").permitAll()
                 .antMatchers("/*.jpg").permitAll()
                 .antMatchers("/**/*.jpg").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
