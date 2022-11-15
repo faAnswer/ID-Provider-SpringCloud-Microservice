@@ -71,4 +71,15 @@ public class RedirectRequestCache extends HttpSessionRequestCache {
 
         this.savedRequestList.clear();
     }
+
+    public SavedRequest getSavedRequest() {
+
+        SavedRequest res = this.savedRequestList.get(0);
+        removeSavedRequest();
+
+        return res;
+
+
+    }
+
 }

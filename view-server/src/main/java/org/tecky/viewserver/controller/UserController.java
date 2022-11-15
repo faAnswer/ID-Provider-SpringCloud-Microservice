@@ -1,6 +1,9 @@
 package org.tecky.viewserver.controller;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.tecky.viewserver.security.config.impl.RedirectRequestCache;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,7 +44,7 @@ public class UserController {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @PostMapping(value = "/api/user/login", consumes = "application/x-www-form-urlencoded", produces = "application/json")
-    public ResponseEntity<?> login(@RequestParam Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void login(@RequestParam Map<String, String> userInfo, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String uri = "http://47.92.137.0:9001/api/auth/login";
 
@@ -55,25 +60,29 @@ public class UserController {
         HttpEntity<String> request2 = new HttpEntity<>(jsonObject.toString(), headers);
 
         //String results = restTemplate.getForObject(uri2, String.class);
+        //restTemplate.exchange ?
+
         ResponseEntity<?> result = restTemplate.postForEntity(uri, request2, String.class);
 
+        String json = (String) result.getBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, String> map = objectMapper.readValue(json , new TypeReference<Map<String, String>>() {});
+
+        Cookie cookie = new Cookie("Authorization", map.get("Authorization"));
+
+        cookie.setMaxAge(7*24*60*60*60);
+        cookie.setPath("/");
+        response.addCookie(cookie);
 
         // Get target URL
-        List<DefaultSavedRequest> savedRequestList = (List<DefaultSavedRequest>) request.getSession().getAttribute(RedirectRequestCache.SAVED_REQUEST);
+        // Not Work
+        //List<DefaultSavedRequest> savedRequestList = (List<DefaultSavedRequest>) request.getSession().getAttribute(RedirectRequestCache.SAVED_REQUEST);
 
-        if(savedRequestList.get(0).getRequestURI().equals("/login")){
+        SavedRequest savedRequest = redirectRequestCache.getSavedRequest();
 
-            redirectRequestCache.removeSavedRequest();
-            response.addHeader("redirect_uri", "/index");
+        response.sendRedirect(savedRequest.getRedirectUrl());
 
-        } else {
-
-            String tarRequest = savedRequestList.get(0).getRedirectUrl();
-            redirectRequestCache.removeSavedRequest();
-            response.addHeader("redirect_uri", tarRequest);
-        }
-
-        // Redirect
-        return result;
     }
 }

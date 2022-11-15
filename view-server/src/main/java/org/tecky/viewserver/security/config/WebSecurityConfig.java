@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.tecky.viewserver.security.config.impl.RedirectRequestCache;
 import org.tecky.viewserver.security.filter.JwtRequestFilter;
 
 import java.util.Arrays;
@@ -19,6 +20,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class WebSecurityConfig {
+
+    @Autowired
+    RedirectRequestCache redirectRequestCache;
 
     @Autowired
     JwtRequestFilter jwtRequestFilter;
@@ -30,7 +34,7 @@ public class WebSecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf()
-                .disable()
+                .disable().requestCache().requestCache(redirectRequestCache).and()
                 .formLogin()
                 .loginPage("/login.html")
                 .and()
@@ -47,7 +51,7 @@ public class WebSecurityConfig {
                 .antMatchers("/**/*.ico").permitAll()
                 .antMatchers("/*.jpg").permitAll()
                 .antMatchers("/**/*.jpg").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -82,13 +82,7 @@ public class UserController {
 
         JwtResponseImpl token = new JwtResponseImpl(jwtToken.generateToken());
 
-        Cookie cookie = new Cookie("Authorization", token.getToken());
-
-        cookie.setMaxAge(7*24*60*60*60);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        return JSONResponse.ok("username", userInfo.get("username"));
+        return JSONResponse.ok("Authorization", token.getToken());
     }
 
     private void authenticate(String username, String password, HttpServletRequest request) throws Exception {
