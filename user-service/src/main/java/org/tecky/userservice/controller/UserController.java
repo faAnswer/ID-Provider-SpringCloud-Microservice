@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.tecky.common.entities.UserEntity;
 import org.tecky.userservice.service.intf.IUserPicService;
 import org.tecky.userservice.service.intf.IUserRegService;
 

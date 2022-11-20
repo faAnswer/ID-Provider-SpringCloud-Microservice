@@ -10,6 +10,7 @@
         <module name="JwtToken" />
         <module name="cloud-nohorny" />
         <module name="user-resource" />
+        <module name="payment-service" />
         <module name="common" />
         <module name="nacos-config" />
         <module name="user-service" />

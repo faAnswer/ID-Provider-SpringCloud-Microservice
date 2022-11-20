@@ -30,4 +30,6 @@ public class OauthClientEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "picuri")
+    private String picuri;
 }

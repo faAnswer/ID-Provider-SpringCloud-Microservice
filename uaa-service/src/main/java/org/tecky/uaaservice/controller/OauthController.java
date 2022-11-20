@@ -28,7 +28,7 @@ public class OauthController {
     @Autowired
     private AccessTokenServiceImpl accessTokenServiceImpl;
 
-    @GetMapping(value = "/authorize", consumes = "application/json")
+    @GetMapping(value = "/authorize")
     public ResponseEntity<?> auth(@RequestParam Map<String, String> oauthInfo, HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception{
 
         final String[] checkToken = new String[1];

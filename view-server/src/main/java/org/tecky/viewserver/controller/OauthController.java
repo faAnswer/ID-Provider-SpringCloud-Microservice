@@ -42,7 +42,7 @@ public class OauthController {
         HttpEntity<String> request2UAA = new HttpEntity<>(mapper.writeValueAsString(paraMap), headers);
 
         //Why exchange?
-        ResponseEntity<?> responseEntityFromUAA = restTemplate.exchange("http://47.92.137.0:9001/api/oauth/authorize" + "?" + refererPara ,HttpMethod.GET, request2UAA, String.class);
+        ResponseEntity<?> responseEntityFromUAA = restTemplate.exchange("http://47.92.137.0:9001/api/oauth/authorize" + refererPara ,HttpMethod.GET, request2UAA, String.class);
 
         responseEntityFromUAA.getHeaders().get((HttpHeaders.SET_COOKIE));
 

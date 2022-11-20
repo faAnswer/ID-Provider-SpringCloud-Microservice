@@ -14,3 +14,7 @@ spring:
           uri: lb://user-resource
           predicates:
             - Path=/api/res/user/**
+        - id: storage-service
+          uri: lb://storage-service
+          predicates:
+            - Path=/api/res/storage/**

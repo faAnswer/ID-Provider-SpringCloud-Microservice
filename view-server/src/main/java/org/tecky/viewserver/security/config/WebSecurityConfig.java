@@ -36,10 +36,12 @@ public class WebSecurityConfig {
                 .csrf()
                 .disable().requestCache().requestCache(redirectRequestCache).and()
                 .formLogin()
-                .loginPage("/login.html")
+                .loginPage("/user/login")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/user/login").permitAll()
+
                 .antMatchers("/index.html").permitAll()
                 .antMatchers("/index").permitAll()
                 .antMatchers("/login.html").permitAll()
