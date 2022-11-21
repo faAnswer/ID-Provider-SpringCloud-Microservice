@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
@@ -34,4 +36,14 @@ public class ViewController {
         return "login";
     }
 
+    @GetMapping("/payment")
+    public String payment(@RequestParam Map<String, String> map, Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+
+
+        String invoice_id = map.get("invoice_id");
+
+        model.addAttribute("invoice_id", invoice_id);
+
+        return "payment";
+    }
 }
