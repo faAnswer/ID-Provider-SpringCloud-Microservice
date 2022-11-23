@@ -22,36 +22,36 @@ import java.util.Optional;
 public class PaymentController {
 
     @GetMapping("/api/payment")
-    public ResponseEntity<?> payment(@RequestParam Map<String, String> map, HttpServletRequest request, HttpServletResponse response) {
+    public String payment(@RequestParam Map<String, String> map, HttpServletRequest request, HttpServletResponse response) {
 
-        String invoice_id = map.get("invoice_id");
+//        String invoice_id = map.get("invoice_id");
+//
+//        URI callback = URI.create("http://47.92.137.0:9001/api/payment/callback?invoice_id=" + invoice_id);
+//
+//        Optional<Cookie> authToken = Arrays.stream(request.getCookies()).filter(element -> element.getName().equals("Authentication")).findFirst();
+//
+//        String authAuth;
+////        if(authToken.isPresent()){
+////
+////            authAuth = authToken.get().getValue();
+////        } else{
+////
+////            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
+////        }
+//
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        headers.add("Authorization", authAuth);
+//
+//
+//        HttpEntity httpEntity = new HttpEntity(headers);
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        ResponseEntity<?> responseEntityFromAPI = restTemplate.exchange(callback, HttpMethod.GET, httpEntity, String.class);
+//
 
-        URI callback = URI.create("http://47.92.137.0:9001/api/payment/callback?invoice_id=" + invoice_id);
 
-        Optional<Cookie> authToken = Arrays.stream(request.getCookies()).filter(element -> element.getName().equals("Authentication")).findFirst();
-
-        String authAuth;
-        if(authToken.isPresent()){
-
-            authAuth = authToken.get().getValue();
-        } else{
-
-            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.add("Authorization", authAuth);
-
-
-        HttpEntity httpEntity = new HttpEntity(headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<?> responseEntityFromAPI = restTemplate.exchange(callback, HttpMethod.GET, httpEntity, String.class);
-
-
-
-        return
+        return "S";
     }
 }

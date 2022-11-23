@@ -1,6 +1,7 @@
 package org.tecky.viewserver.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.faAnswer.web.util.Url2ParamMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +20,7 @@ import java.util.Map;
 public class ViewController {
 
     @GetMapping("/oauth/authorize")
-    public String getAuthorize(@RequestParam Map<String, String> map, Model model, RedirectAttributes redirectAttributes) {
-
+    public String getAuthorize(@RequestParam Map<String, String> map, Model model, RedirectAttributes redirectAttribute, Authentication authentication) {
 
 
 

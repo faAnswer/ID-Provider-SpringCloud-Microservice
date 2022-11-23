@@ -65,7 +65,7 @@ public class OauthController {
         cookie.setPath("/");
         response.addCookie(cookie);
 
-        return JSONResponse.ok("access", token.getToken());
+        return JSONResponse.ok("AccessToken", token.getToken());
     }
 
 //    @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
