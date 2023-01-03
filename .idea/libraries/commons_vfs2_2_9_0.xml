@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="commons-vfs2-2.9.0">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/gateway/src/main/resources/commons-vfs2-2.9.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
